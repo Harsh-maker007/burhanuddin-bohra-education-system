@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% set body_class = "theme-slate" %}
+{% block content %}
+  <section class="hero-card">
+    <h1>Education Platform</h1>
+    <p>Basic demo interface for the education system dataset project.</p>
+  </section>
+
+  <section class="content-card">
+    <h2>Dataset Details</h2>
+    <p>
+      This project fills the gap by developing an inclusive prediction and instructional
+      support system. The student-related data includes:
+    </p>
+    <ul class="bullets">
+      <li>% of Attendance</li>
+      <li>% of Hours of Study</li>
+      <li>Previous Scores</li>
+    </ul>
+    <p>The dataset has approximately 100-200 total records.</p>
+  </section>
+
+  <section class="content-grid">
+    <div class="content-card">
+      <h3>Data Preprocessing</h3>
+      <ul class="bullets">
+        <li>Elimination of gaps in data entry</li>
+        <li>Cleaning of data</li>
+        <li>Standardization of features</li>
+      </ul>
+    </div>
+    <div class="content-card">
+      <h3>Feature Engineering</h3>
+      <ul class="bullets">
+        <li>Hours Spent Studying - effort exerted</li>
+        <li>Attendance Rate - amount of class attendance</li>
+        <li>Past Test Scores - periodic means with which to measure progress</li>
+      </ul>
+    </div>
+    <div class="content-card">
+      <h3>Train/Test Split</h3>
+      <ul class="bullets">
+        <li>80% Training</li>
+        <li>20% Testing</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="content-card">
+    <h2>System Architecture Diagram</h2>
+    <div class="flow">
+      <div>User Input</div>
+      <div class="flow-arrow">↓</div>
+      <div>Flask Web Interface</div>
+      <div class="flow-arrow">↓</div>
+      <div>Data Processing</div>
+      <div class="flow-arrow">↓</div>
+      <div>Machine Learning Model (Linear Regression)</div>
+      <div class="flow-arrow">↓</div>
+      <div>Predicted Output</div>
+      <div class="flow-arrow">↓</div>
+      <div>Displayed to User</div>
+    </div>
+  </section>
+
+  <section class="content-card">
+    <h2>Implementation</h2>
+    <p>This basic app uses Flask with a single page and simple styling.</p>
+  </section>
+{% endblock %}

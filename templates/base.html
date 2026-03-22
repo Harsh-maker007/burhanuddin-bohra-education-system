@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title if title else "Education Platform" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="{{ body_class if body_class else 'theme-slate' }}">
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-icon">🎓</span>
+        <div>
+          <div class="brand-title">Education Platform</div>
+          <div class="brand-subtitle">AI-based exam prediction system</div>
+        </div>
+      </div>
+      <nav class="site-nav">
+        <a href="{{ url_for('index') }}">Home</a>
+      </nav>
+    </header>
+
+    <main class="page">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <span>Inclusive prediction and instructional support system</span>
+    </footer>
+  </body>
+</html>
