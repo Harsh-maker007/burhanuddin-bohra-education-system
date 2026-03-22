@@ -1,6 +1,3 @@
-import csv
-from pathlib import Path
-
 import streamlit as st
 
 
@@ -65,15 +62,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR / "data" / "students.csv"
-
-
-def generate_dataset() -> None:
+def generate_dataset():
     import random
 
     rng = random.Random(42)
-    records = []
+    features = []
+    targets = []
     for _ in range(150):
         attendance = rng.uniform(60, 100)
         study_hours = rng.uniform(40, 100)
@@ -82,43 +76,8 @@ def generate_dataset() -> None:
         predicted = (
             0.4 * attendance + 0.3 * study_hours + 0.3 * previous_score + noise
         )
-        records.append(
-            {
-                "attendance_pct": round(attendance, 2),
-                "study_hours_pct": round(study_hours, 2),
-                "previous_score": round(previous_score, 2),
-                "predicted_score": round(predicted, 2),
-            }
-        )
-    DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with DATA_PATH.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(
-            handle,
-            fieldnames=[
-                "attendance_pct",
-                "study_hours_pct",
-                "previous_score",
-                "predicted_score",
-            ],
-        )
-        writer.writeheader()
-        writer.writerows(records)
-
-
-def load_dataset():
-    features = []
-    targets = []
-    with DATA_PATH.open("r", newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle)
-        for row in reader:
-            features.append(
-                [
-                    float(row["attendance_pct"]),
-                    float(row["study_hours_pct"]),
-                    float(row["previous_score"]),
-                ]
-            )
-            targets.append(float(row["predicted_score"]))
+        features.append([attendance, study_hours, previous_score])
+        targets.append(predicted)
     return features, targets
 
 
@@ -163,12 +122,19 @@ def train_linear_regression(features, targets):
 
 
 st.markdown("<div class='card'><h2>Quick Prediction</h2>", unsafe_allow_html=True)
-if not DATA_PATH.exists():
-    generate_dataset()
 
-features, targets = load_dataset()
-split_index = int(len(features) * 0.8)
-coeffs = train_linear_regression(features[:split_index], targets[:split_index])
+@st.cache_data
+def get_coeffs():
+    features, targets = generate_dataset()
+    split_index = int(len(features) * 0.8)
+    return train_linear_regression(features[:split_index], targets[:split_index])
+
+coeffs = None
+training_error = None
+try:
+    coeffs = get_coeffs()
+except Exception as exc:
+    training_error = str(exc)
 
 with st.form("predict_form"):
     col1, col2, col3 = st.columns(3)
@@ -181,18 +147,21 @@ with st.form("predict_form"):
     submitted = st.form_submit_button("Predict Score")
 
 if submitted:
-    prediction = (
-        coeffs[0]
-        + coeffs[1] * attendance
-        + coeffs[2] * study_hours
-        + coeffs[3] * previous_score
-    )
-    st.success(f"Predicted Score: {prediction:.1f}%")
-    st.caption(
-        f"Trained weights: bias={coeffs[0]:.2f}, "
-        f"attendance={coeffs[1]:.2f}, study_hours={coeffs[2]:.2f}, "
-        f"previous_score={coeffs[3]:.2f}"
-    )
+    if training_error or coeffs is None:
+        st.error("Prediction failed. Please reload the app.")
+    else:
+        prediction = (
+            coeffs[0]
+            + coeffs[1] * attendance
+            + coeffs[2] * study_hours
+            + coeffs[3] * previous_score
+        )
+        st.success(f"Predicted Score: {prediction:.1f}%")
+        st.caption(
+            f"Trained weights: bias={coeffs[0]:.2f}, "
+            f"attendance={coeffs[1]:.2f}, study_hours={coeffs[2]:.2f}, "
+            f"previous_score={coeffs[3]:.2f}"
+        )
 st.markdown("</div>", unsafe_allow_html=True)
 
 left, right = st.columns([1, 1])
