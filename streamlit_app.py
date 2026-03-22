@@ -29,6 +29,15 @@ st.markdown(
         margin-bottom: 18px;
         color: #1e293b;
     }
+    .result-card {
+        background: #eaf2ff;
+        border: 1px solid #c7dbff;
+        padding: 16px 18px;
+        border-radius: 14px;
+        margin-top: 16px;
+        color: #0f172a;
+        font-weight: 600;
+    }
     .flow {
         font-weight: 600;
         line-height: 1.8;
@@ -148,7 +157,10 @@ with st.form("predict_form"):
 
 if submitted:
     if training_error or coeffs is None:
-        st.error("Prediction failed. Please reload the app.")
+        st.markdown(
+            "<div class='result-card'>Prediction failed. Please reload the app.</div>",
+            unsafe_allow_html=True,
+        )
     else:
         prediction = (
             coeffs[0]
@@ -156,7 +168,10 @@ if submitted:
             + coeffs[2] * study_hours
             + coeffs[3] * previous_score
         )
-        st.success(f"Predicted Score: {prediction:.1f}%")
+        st.markdown(
+            f"<div class='result-card'>Predicted Score: {prediction:.1f}%</div>",
+            unsafe_allow_html=True,
+        )
         st.caption(
             f"Trained weights: bias={coeffs[0]:.2f}, "
             f"attendance={coeffs[1]:.2f}, study_hours={coeffs[2]:.2f}, "
