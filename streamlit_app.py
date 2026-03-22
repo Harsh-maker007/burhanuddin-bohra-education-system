@@ -10,25 +10,41 @@ st.markdown(
     """
     <style>
     .main {
-        background: linear-gradient(135deg, #fde9e8, #f7c7c4);
+        background: linear-gradient(135deg, #f7f9fc, #e6eef6);
     }
     .hero {
-        background: rgba(255, 255, 255, 0.85);
+        background: #ffffff;
         padding: 24px 28px;
         border-radius: 18px;
         box-shadow: 0 16px 40px rgba(18, 22, 26, 0.15);
         margin-bottom: 24px;
+        color: #1e293b;
     }
     .card {
-        background: rgba(255, 255, 255, 0.95);
+        background: #ffffff;
         padding: 20px 24px;
         border-radius: 18px;
         box-shadow: 0 12px 30px rgba(18, 22, 26, 0.12);
         margin-bottom: 18px;
+        color: #1e293b;
     }
     .flow {
         font-weight: 600;
         line-height: 1.8;
+    }
+    h1, h2, h3, p, li, span, label {
+        color: #1e293b;
+    }
+    .stMarkdown p {
+        color: #334155;
+    }
+    .stNumberInput label, .stTextInput label, .stSelectbox label {
+        color: #1e293b !important;
+    }
+    .stButton>button {
+        background: #1d4ed8;
+        color: #ffffff;
+        border: 0;
     }
     </style>
     """,
