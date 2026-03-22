@@ -9,6 +9,10 @@ st.set_page_config(page_title="Education Platform", layout="wide")
 st.markdown(
     """
     <style>
+    .stApp {
+        background: linear-gradient(135deg, #f7f9fc, #e6eef6);
+        color: #1e293b;
+    }
     .main {
         background: linear-gradient(135deg, #f7f9fc, #e6eef6);
     }
