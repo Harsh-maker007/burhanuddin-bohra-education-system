@@ -38,6 +38,22 @@ st.markdown(
         color: #0f172a;
         font-weight: 600;
     }
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .module-tile {
+        background: #f1f5f9;
+        border: 1px solid #d4e1f5;
+        padding: 16px 18px;
+        border-radius: 16px;
+        font-weight: 600;
+        color: #1e293b;
+        text-align: center;
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
+    }
     .flow {
         font-weight: 600;
         line-height: 1.8;
@@ -65,7 +81,23 @@ st.markdown(
     """
     <div class="hero">
         <h1>Education Platform</h1>
-        <p>Basic demo interface for the education system dataset project.</p>
+        <p>Choose a module to get started.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="card">
+        <h2>Dashboard Modules</h2>
+        <div class="module-grid">
+            <div class="module-tile">Exam Predictor</div>
+            <div class="module-tile">Smart Tutor</div>
+            <div class="module-tile">Essay Grader</div>
+            <div class="module-tile">Attendance</div>
+            <div class="module-tile">QA Bot</div>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -179,4 +211,75 @@ if submitted:
         )
 st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown("")
+st.markdown(
+    """
+    <div class="card">
+        <h2>Smart Tutor</h2>
+        <p>Get a quick study tip for a topic.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+topic = st.text_input("Topic for Smart Tutor")
+if st.button("Generate Tip"):
+    if topic.strip():
+        st.info(f"Tip: Break '{topic.strip()}' into small concepts and practice with 3 short questions.")
+    else:
+        st.warning("Please enter a topic.")
+
+st.markdown(
+    """
+    <div class="card">
+        <h2>Essay Grader</h2>
+        <p>Paste an essay draft to get quick feedback.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+essay = st.text_area("Essay Draft", height=160)
+if st.button("Grade Essay"):
+    if essay.strip():
+        st.success("Feedback: Clear structure. Add two specific examples and tighten the conclusion.")
+    else:
+        st.warning("Please paste an essay draft.")
+
+st.markdown(
+    """
+    <div class="card">
+        <h2>Attendance</h2>
+        <p>Record attendance quickly.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+att_col1, att_col2 = st.columns(2)
+with att_col1:
+    roll_no = st.text_input("Roll No")
+with att_col2:
+    student_name = st.text_input("Student Name")
+slot_col1, slot_col2 = st.columns(2)
+with slot_col1:
+    class_slot = st.selectbox("Class Slot", ["Morning", "Afternoon", "Evening"])
+with slot_col2:
+    status = st.selectbox("Status", ["Present", "Absent", "Late"])
+if st.button("Submit Attendance"):
+    if roll_no.strip() and student_name.strip():
+        st.success(f"Attendance saved for {student_name.strip()} ({roll_no.strip()}) - {status}.")
+    else:
+        st.warning("Please enter roll number and student name.")
+
+st.markdown(
+    """
+    <div class="card">
+        <h2>QA Bot</h2>
+        <p>Ask a question about your studies.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+question = st.text_area("Ask a question")
+if st.button("Get Answer"):
+    if question.strip():
+        st.info("Answer: Focus on key definitions first, then solve a small example.")
+    else:
+        st.warning("Please enter a question.")
