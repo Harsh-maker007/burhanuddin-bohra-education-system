@@ -220,8 +220,10 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-topic = st.text_input("Topic for Smart Tutor")
-if st.button("Generate Tip"):
+with st.form("smart_tutor_form"):
+    topic = st.text_input("Topic for Smart Tutor", key="smart_tutor_topic")
+    smart_submit = st.form_submit_button("Generate Tip")
+if smart_submit:
     if topic.strip():
         st.info(f"Tip: Break '{topic.strip()}' into small concepts and practice with 3 short questions.")
     else:
@@ -236,8 +238,10 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-essay = st.text_area("Essay Draft", height=160)
-if st.button("Grade Essay"):
+with st.form("essay_grader_form"):
+    essay = st.text_area("Essay Draft", height=160, key="essay_draft")
+    essay_submit = st.form_submit_button("Grade Essay")
+if essay_submit:
     if essay.strip():
         st.success("Feedback: Clear structure. Add two specific examples and tighten the conclusion.")
     else:
@@ -252,17 +256,19 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-att_col1, att_col2 = st.columns(2)
-with att_col1:
-    roll_no = st.text_input("Roll No")
-with att_col2:
-    student_name = st.text_input("Student Name")
-slot_col1, slot_col2 = st.columns(2)
-with slot_col1:
-    class_slot = st.selectbox("Class Slot", ["Morning", "Afternoon", "Evening"])
-with slot_col2:
-    status = st.selectbox("Status", ["Present", "Absent", "Late"])
-if st.button("Submit Attendance"):
+with st.form("attendance_form"):
+    att_col1, att_col2 = st.columns(2)
+    with att_col1:
+        roll_no = st.text_input("Roll No", key="attendance_roll_no")
+    with att_col2:
+        student_name = st.text_input("Student Name", key="attendance_student_name")
+    slot_col1, slot_col2 = st.columns(2)
+    with slot_col1:
+        class_slot = st.selectbox("Class Slot", ["Morning", "Afternoon", "Evening"], key="attendance_class_slot")
+    with slot_col2:
+        status = st.selectbox("Status", ["Present", "Absent", "Late"], key="attendance_status")
+    attendance_submit = st.form_submit_button("Submit Attendance")
+if attendance_submit:
     if roll_no.strip() and student_name.strip():
         st.success(f"Attendance saved for {student_name.strip()} ({roll_no.strip()}) - {status}.")
     else:
@@ -277,8 +283,10 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-question = st.text_area("Ask a question")
-if st.button("Get Answer"):
+with st.form("qa_bot_form"):
+    question = st.text_area("Ask a question", key="qa_bot_question")
+    qa_submit = st.form_submit_button("Get Answer")
+if qa_submit:
     if question.strip():
         st.info("Answer: Focus on key definitions first, then solve a small example.")
     else:
