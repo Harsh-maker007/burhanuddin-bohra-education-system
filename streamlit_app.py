@@ -225,27 +225,6 @@ with right:
     )
     st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("<div class='card'><h2>System Architecture Diagram</h2>", unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="flow">
-        User Input<br/>
-        ↓<br/>
-        Flask Web Interface<br/>
-        ↓<br/>
-        Data Processing<br/>
-        ↓<br/>
-        Machine Learning Model (Linear Regression)<br/>
-        ↓<br/>
-        Predicted Output<br/>
-        ↓<br/>
-        Displayed to User
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
     st.markdown("<div class='card'><h2>Implementation</h2>", unsafe_allow_html=True)
     st.markdown("This basic app uses Streamlit with a single page and simple styling.")
     st.markdown("</div>", unsafe_allow_html=True)
