@@ -256,23 +256,56 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-with st.form("attendance_form"):
-    att_col1, att_col2 = st.columns(2)
-    with att_col1:
-        roll_no = st.text_input("Roll No", key="attendance_roll_no")
-    with att_col2:
-        student_name = st.text_input("Student Name", key="attendance_student_name")
-    slot_col1, slot_col2 = st.columns(2)
-    with slot_col1:
-        class_slot = st.selectbox("Class Slot", ["Morning", "Afternoon", "Evening"], key="attendance_class_slot")
-    with slot_col2:
-        status = st.selectbox("Status", ["Present", "Absent", "Late"], key="attendance_status")
-    attendance_submit = st.form_submit_button("Submit Attendance")
-if attendance_submit:
-    if roll_no.strip() and student_name.strip():
-        st.success(f"Attendance saved for {student_name.strip()} ({roll_no.strip()}) - {status}.")
-    else:
-        st.warning("Please enter roll number and student name.")
+def render_attendance():
+    if "attendance_records" not in st.session_state:
+        st.session_state["attendance_records"] = []
+
+    with st.form("attendance_form"):
+        att_col1, att_col2 = st.columns(2)
+        with att_col1:
+            roll_no = st.text_input("Roll No", key="attendance_roll_no")
+        with att_col2:
+            student_name = st.text_input("Student Name", key="attendance_student_name")
+        slot_col1, slot_col2 = st.columns(2)
+        with slot_col1:
+            class_slot = st.selectbox(
+                "Class Slot",
+                ["Morning", "Afternoon", "Evening"],
+                key="attendance_class_slot",
+            )
+        with slot_col2:
+            status = st.selectbox(
+                "Status",
+                ["Present", "Absent", "Late"],
+                key="attendance_status",
+            )
+        attendance_submit = st.form_submit_button("Submit Attendance")
+
+    if attendance_submit:
+        if roll_no.strip() and student_name.strip():
+            st.session_state["attendance_records"].append(
+                {
+                    "roll_no": roll_no.strip(),
+                    "student_name": student_name.strip(),
+                    "class_slot": class_slot,
+                    "status": status,
+                }
+            )
+            st.success(
+                f"Attendance saved for {student_name.strip()} ({roll_no.strip()}) - {status}."
+            )
+        else:
+            st.warning("Please enter roll number and student name.")
+
+    if st.session_state["attendance_records"]:
+        st.caption("Recent attendance submissions")
+        st.dataframe(st.session_state["attendance_records"], use_container_width=True)
+
+try:
+    render_attendance()
+except Exception as exc:
+    st.error("Attendance module error. Please reload the app.")
+    st.exception(exc)
 
 st.markdown(
     """
