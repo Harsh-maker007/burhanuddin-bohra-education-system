@@ -38,22 +38,6 @@ st.markdown(
         color: #0f172a;
         font-weight: 600;
     }
-    .module-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 16px;
-        margin-top: 16px;
-    }
-    .module-tile {
-        background: #f1f5f9;
-        border: 1px solid #d4e1f5;
-        padding: 16px 18px;
-        border-radius: 16px;
-        font-weight: 600;
-        color: #1e293b;
-        text-align: center;
-        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
-    }
     .flow {
         font-weight: 600;
         line-height: 1.8;
@@ -82,22 +66,6 @@ st.markdown(
     <div class="hero">
         <h1>Education Platform</h1>
         <p>Choose a module to get started.</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    """
-    <div class="card">
-        <h2>Dashboard Modules</h2>
-        <div class="module-grid">
-            <div class="module-tile">Exam Predictor</div>
-            <div class="module-tile">Smart Tutor</div>
-            <div class="module-tile">Essay Grader</div>
-            <div class="module-tile">Attendance</div>
-            <div class="module-tile">QA Bot</div>
-        </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -210,117 +178,3 @@ if submitted:
             f"previous_score={coeffs[3]:.2f}"
         )
 st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown(
-    """
-    <div class="card">
-        <h2>Smart Tutor</h2>
-        <p>Get a quick study tip for a topic.</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-with st.form("smart_tutor_form"):
-    topic = st.text_input("Topic for Smart Tutor", key="smart_tutor_topic")
-    smart_submit = st.form_submit_button("Generate Tip")
-if smart_submit:
-    if topic.strip():
-        st.info(f"Tip: Break '{topic.strip()}' into small concepts and practice with 3 short questions.")
-    else:
-        st.warning("Please enter a topic.")
-
-st.markdown(
-    """
-    <div class="card">
-        <h2>Essay Grader</h2>
-        <p>Paste an essay draft to get quick feedback.</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-with st.form("essay_grader_form"):
-    essay = st.text_area("Essay Draft", height=160, key="essay_draft")
-    essay_submit = st.form_submit_button("Grade Essay")
-if essay_submit:
-    if essay.strip():
-        st.success("Feedback: Clear structure. Add two specific examples and tighten the conclusion.")
-    else:
-        st.warning("Please paste an essay draft.")
-
-st.markdown(
-    """
-    <div class="card">
-        <h2>Attendance</h2>
-        <p>Record attendance quickly.</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-def render_attendance():
-    if "attendance_records" not in st.session_state:
-        st.session_state["attendance_records"] = []
-
-    with st.form("attendance_form"):
-        att_col1, att_col2 = st.columns(2)
-        with att_col1:
-            roll_no = st.text_input("Roll No", key="attendance_roll_no")
-        with att_col2:
-            student_name = st.text_input("Student Name", key="attendance_student_name")
-        slot_col1, slot_col2 = st.columns(2)
-        with slot_col1:
-            class_slot = st.selectbox(
-                "Class Slot",
-                ["Morning", "Afternoon", "Evening"],
-                key="attendance_class_slot",
-            )
-        with slot_col2:
-            status = st.selectbox(
-                "Status",
-                ["Present", "Absent", "Late"],
-                key="attendance_status",
-            )
-        attendance_submit = st.form_submit_button("Submit Attendance")
-
-    if attendance_submit:
-        if roll_no.strip() and student_name.strip():
-            st.session_state["attendance_records"].append(
-                {
-                    "roll_no": roll_no.strip(),
-                    "student_name": student_name.strip(),
-                    "class_slot": class_slot,
-                    "status": status,
-                }
-            )
-            st.success(
-                f"Attendance saved for {student_name.strip()} ({roll_no.strip()}) - {status}."
-            )
-        else:
-            st.warning("Please enter roll number and student name.")
-
-    if st.session_state["attendance_records"]:
-        st.caption("Recent attendance submissions")
-        st.dataframe(st.session_state["attendance_records"], use_container_width=True)
-
-try:
-    render_attendance()
-except Exception as exc:
-    st.error("Attendance module error. Please reload the app.")
-    st.exception(exc)
-
-st.markdown(
-    """
-    <div class="card">
-        <h2>QA Bot</h2>
-        <p>Ask a question about your studies.</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-with st.form("qa_bot_form"):
-    question = st.text_area("Ask a question", key="qa_bot_question")
-    qa_submit = st.form_submit_button("Get Answer")
-if qa_submit:
-    if question.strip():
-        st.info("Answer: Focus on key definitions first, then solve a small example.")
-    else:
-        st.warning("Please enter a question.")
